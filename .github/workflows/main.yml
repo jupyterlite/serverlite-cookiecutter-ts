@@ -176,6 +176,7 @@ jobs:
           path: myextension.tar.gz
 
   test_isolated:
+    needs: [server]
     runs-on: ubuntu-latest
 
     steps:
