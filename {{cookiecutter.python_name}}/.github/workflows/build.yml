@@ -54,7 +54,9 @@ jobs:
         python -m pip install .
 
         jupyter labextension list 2>&1 | grep -ie "{{ cookiecutter.labextension_name }}.*OK"
-        python -m jupyterlab.browser_check
+        
+        # TODO: add JupyterLite browser check
+        # python -m jupyterlab.browser_check
 
         check-manifest -v
 
@@ -93,4 +95,6 @@ jobs:
         pip install myextension.tar.gz
         pip install jupyterlab
         jupyter labextension list 2>&1 | grep -ie "{{ cookiecutter.labextension_name }}.*OK"
-        python -m jupyterlab.browser_check --no-chrome-test
+        
+        # TODO: add JupyterLite browser check
+        # python -m jupyterlab.browser_check --no-chrome-test
