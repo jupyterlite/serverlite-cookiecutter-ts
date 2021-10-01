@@ -10,8 +10,7 @@ graft {{ cookiecutter.python_name }}/labextension
 
 # Javascript files
 graft src
-graft style{% if cookiecutter.has_settings.lower().startswith('y') %}
-graft schema{% endif %}
+graft style
 prune **/node_modules
 prune lib
 prune binder

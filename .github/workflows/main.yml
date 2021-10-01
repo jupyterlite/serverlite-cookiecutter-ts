@@ -132,7 +132,7 @@ jobs:
         run: |
           set -eux
           # Trick to use custom parameters
-          python -c "from cookiecutter.main import cookiecutter; import json; f=open('cookiecutter.json'); d=json.load(f); f.close(); d['has_settings']='y'; cookiecutter('.', extra_context=d, no_input=True)"
+          python -c "from cookiecutter.main import cookiecutter; import json; f=open('cookiecutter.json'); d=json.load(f); f.close(); cookiecutter('.', extra_context=d, no_input=True)"
           pushd myextension
           pip install jupyterlab
           jlpm install
