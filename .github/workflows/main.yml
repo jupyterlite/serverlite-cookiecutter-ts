@@ -128,7 +128,7 @@ jobs:
             yarn-
       - name: Install dependencies
         run: |
-          python -m pip install cookiecutter check-manifest build
+          python -m pip install cookiecutter check-manifest build jupyterlab
     
       - name: Check pip install method
         run: |
