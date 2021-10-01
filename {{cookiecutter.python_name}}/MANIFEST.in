@@ -1,8 +1,6 @@
 include LICENSE
 include *.md
-include pyproject.toml{% if cookiecutter.has_server_extension == "y" %}
-recursive-include jupyter-config *.json{% endif %}
-
+include pyproject.toml
 include package.json
 include install.json
 include ts*.json
