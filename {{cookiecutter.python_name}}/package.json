@@ -69,6 +69,9 @@
     "extension": true,
     "outputDir": "{{cookiecutter.python_name}}/labextension"
   },
+  "jupyterlite": {
+    "liteExtension": true
+  },
   "jupyter-releaser": {
     "hooks": {
       "before-build-npm": [
