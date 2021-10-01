@@ -6,6 +6,7 @@ This cookiecutter is based on the upstream JupyterLab Extension Cookiecutter: ht
 
 ## Examples
 
+- https://github.com/jupyterlite/echo-kernel
 - https://github.com/jupyterlite/p5-kernel
 
 ## Use the template to create package
