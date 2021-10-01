@@ -145,7 +145,7 @@ jobs:
           jupyter labextension list 2>&1 | grep -ie "myextension.*OK"
           # This test should be made outside the extension folder
           python -m jupyterlab.browser_check
-          pip uninstall -y myextension jupyterlab
+          pip uninstall -y myextension
           rm -rf myextension
         shell: bash
 
