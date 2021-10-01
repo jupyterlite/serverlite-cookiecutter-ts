@@ -4,6 +4,10 @@
 
 This cookiecutter is based on the upstream JupyterLab Extension Cookiecutter: https://github.com/jupyterlab/extension-cookiecutter-ts
 
+## Examples
+
+- https://github.com/jupyterlite/p5-kernel
+
 ## Use the template to create package
 
 Install cookiecutter with:
