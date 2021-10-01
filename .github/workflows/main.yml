@@ -130,6 +130,14 @@ jobs:
         run: |
           python -m pip install cookiecutter check-manifest build jupyterlab
     
+      - name: Create server extension pip install
+        run: |
+          # Trick to use custom parameters
+          python -c "from cookiecutter.main import cookiecutter; import json; f=open('cookiecutter.json'); d=json.load(f); f.close(); cookiecutter('.', extra_context=d, no_input=True)"
+          cd myextension
+          pip install .
+          pip install jupyterlab
+
       - name: Check pip install method
         run: |
           set -eux
