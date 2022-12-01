@@ -30,7 +30,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install cookiecutter check-manifest build
+          python -m pip install cookiecutter
 
       - name: Create pure frontend extension
         env:
@@ -41,19 +41,17 @@ jobs:
           # Trick to use custom parameters
           python -c "from cookiecutter.main import cookiecutter; import json, os; f=open('cookiecutter.json'); d=json.load(f); f.close(); d['labextension_name']=os.getenv('NAME'); cookiecutter('.', extra_context=d, no_input=True)"
           pushd ${PYNAME}
-          pip install jupyterlab
-          jlpm install && jlpm run eslint:check
-          pip install -e .
+          python -m pip install jupyterlab
+          jlpm
+          jlpm lint:check
+          python -m pip install -e .
           jupyter labextension develop . --overwrite
           jupyter labextension list
           jupyter labextension list 2>&1 | grep -ie "${NAME}.*OK"
           python -m jupyterlab.browser_check
 
           jupyter labextension uninstall ${NAME}
-          pip uninstall -y ${NAME} jupyterlab
-
-          git init && git add .
-          check-manifest -v
+          python -m pip uninstall -y ${NAME} jupyterlab
 
           popd
           rm -rf ${NAME}
@@ -65,7 +63,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         # This will be used by the base setup action
-        python-version: ["3.7", "3.10"]
+        python-version: ["3.7", "3.11"]
 
     steps:
       - name: Checkout
@@ -76,15 +74,18 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install cookiecutter check-manifest build jupyterlab
+          python -m pip install cookiecutter build jupyterlab
 
       - name: Create extension pip install
         run: |
           # Trick to use custom parameters
           python -c "from cookiecutter.main import cookiecutter; import json; f=open('cookiecutter.json'); d=json.load(f); f.close(); cookiecutter('.', extra_context=d, no_input=True)"
           cd myextension
+          cat pyproject.toml
           pip install .
           pip install jupyterlab
+          jlpm
+          jlpm lint:check
 
       - name: Check pip install method
         run: |
@@ -97,42 +98,16 @@ jobs:
           rm -rf myextension
         shell: bash
 
-      - name: Create extension pip develop
-        run: |
-          # Trick to use custom parameters
-          python -c "from cookiecutter.main import cookiecutter; import json; f=open('cookiecutter.json'); d=json.load(f); f.close(); cookiecutter('.', extra_context=d, no_input=True)"
-          cd myextension
-          pip install -e .
-          pip install jupyterlab
-          jupyter labextension develop . --overwrite
-          jupyter server extension enable myextension
-
-      - name: Check pip develop method
-        run: |
-          set -eux
-          jupyter labextension list
-          jupyter labextension list 2>&1 | grep -ie "myextension.*OK"
-          # This test should be made outside the extension folder
-          python -m jupyterlab.browser_check
-        shell: bash
-
-      - name: Build extension in develop mode
-        run: |
-          jupyter labextension develop ./myextension --overwrite
-          jupyter labextension build ./myextension
-          pip uninstall -y myextension jupyterlab
-          python -c "import shutil; shutil.rmtree('myextension')"
-
       - name: Install extension from a tarball
         run: |
           # Trick to use custom parameters
           python -c "from cookiecutter.main import cookiecutter; import json; f=open('cookiecutter.json'); d=json.load(f); f.close(); cookiecutter('.', extra_context=d, no_input=True)"
           cd myextension
-          pip install jupyterlab
+          python -m pip install jupyterlab
           jupyter lab clean --all
-          python -m build --sdist
+          python -m build
           cd dist
-          pip install myextension-0.1.0.tar.gz
+          python -m pip install myextension-0.1.0.tar.gz
 
       - name: Check install tarball method
         run: |
@@ -142,7 +117,8 @@ jobs:
           jupyter lab build --dev-build --no-minimize
           python -m jupyterlab.browser_check
           cp myextension/dist/*.tar.gz myextension.tar.gz
-          pip uninstall -y myextension jupyterlab
+          cp myextension/dist/*.whl myextension.whl
+          python -m pip uninstall -y myextension jupyterlab
           rm -rf myextension
         shell: bash
 
@@ -150,14 +126,16 @@ jobs:
         if: startsWith(runner.os, 'Linux')
         with:
           name: myextension-sdist
-          path: myextension.tar.gz
+          path: |
+            myextension.tar.gz
+            myextension.whl
 
   test_isolated:
     needs: [server]
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.7", "3.10"]
+        python-version: ["3.7", "3.11"]
 
     steps:
       - name: Checkout
@@ -185,7 +163,7 @@ jobs:
           sudo rm -rf $(which node)
           sudo rm -rf $(which node)
 
-          pip install myextension.tar.gz
-          pip install jupyterlab
+          python -m pip install myextension.tar.gz
+          python -m pip install jupyterlab
           jupyter labextension list 2>&1 | grep -ie "myextension.*OK"
           python -m jupyterlab.browser_check --no-chrome-test
