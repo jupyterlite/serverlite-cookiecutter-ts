@@ -39,11 +39,10 @@ jobs:
         run: |
           set -eux
           # Trick to use custom parameters
-          python -c "from cookiecutter.main import cookiecutter; import json, os; f=open('cookiecutter.json'); d=json.load(f); f.close(); d['kind']=d['kind'][0]; d['labextension_name']=os.getenv('NAME'); cookiecutter('.', extra_context=d, no_input=True)"
+          python -c "from cookiecutter.main import cookiecutter; import json, os; f=open('cookiecutter.json'); d=json.load(f); f.close(); d['labextension_name']=os.getenv('NAME'); cookiecutter('.', extra_context=d, no_input=True)"
           pushd ${PYNAME}
           python -m pip install jupyterlab
           jlpm
-          jlpm stylelint-config-prettier-check
           jlpm lint:check
           python -m pip install -e .
           jupyter labextension develop . --overwrite
@@ -98,35 +97,6 @@ jobs:
           pip uninstall -y myextension jupyterlab
           rm -rf myextension
         shell: bash
-
-      - name: Create extension pip develop
-        run: |
-          # Trick to use custom parameters
-          python -c "from cookiecutter.main import cookiecutter; import json; f=open('cookiecutter.json'); d=json.load(f); f.close(); cookiecutter('.', extra_context=d, no_input=True)"
-          cd myextension
-          python -m pip install -e .[test]
-          python -m pip install jupyterlab
-          jupyter labextension develop . --overwrite
-          jupyter server extension enable myextension
-
-          # Check unit tests are passing
-          python -m pytest -vv -r ap --cov myextension
-
-      - name: Check pip develop method
-        run: |
-          set -eux
-          jupyter labextension list
-          jupyter labextension list 2>&1 | grep -ie "myextension.*OK"
-          # This test should be made outside the extension folder
-          python -m jupyterlab.browser_check
-        shell: bash
-
-      - name: Build extension in develop mode
-        run: |
-          jupyter labextension develop ./myextension --overwrite
-          jupyter labextension build ./myextension
-          python -m pip uninstall -y myextension jupyterlab
-          python -c "import shutil; shutil.rmtree('myextension')"
 
       - name: Install extension from a tarball
         run: |

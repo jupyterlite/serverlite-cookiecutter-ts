@@ -4,8 +4,5 @@
   "labextension_name": "myextension",
   "python_name": "{{ cookiecutter.labextension_name | replace('-', '_') }}",
   "project_short_description": "A JupyterLite server extension.",
-  "repository": "https://github.com/github_username/{{ cookiecutter.labextension_name }}",
-  "_copy_without_render": [
-    ".github/workflows/check-release.yml"
-  ]
+  "repository": "https://github.com/github_username/{{ cookiecutter.labextension_name }}"
 }
