@@ -1,5 +1,11 @@
 # JupyterLite Server Extension Cookiecutter
 
+> [!WARNING]
+> This repo is now archived.
+> Check out the [JupyterLite documentation](https://jupyterlite.readthedocs.io/) to learn how to develop extensions.
+
+---
+
 ![Github Actions Status](https://github.com/jupyterlite/serverlite-cookiecutter-ts/workflows/CI/badge.svg)
 
 This cookiecutter is based on the upstream JupyterLab Extension Cookiecutter: https://github.com/jupyterlab/extension-cookiecutter-ts
